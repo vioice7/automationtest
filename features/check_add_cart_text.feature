@@ -7,8 +7,14 @@ Feature: Add to cart check
     When I press "Add to cart"
     When I wait 10 seconds
     Given I am on "http://automationpractice.com/index.php?controller=order"
-    When I wait 10 seconds
-    When I scroll 100 pixels
+    When I wait 5 seconds
+    Then I should see "Proceed to checkout"
     Given I am on "http://automationpractice.com/index.php?controller=order&step=1"
-    When I wait 10 seconds
+    When I wait 5 seconds
     Then I should see "Create an account"
+    Given I am on "http://automationpractice.com/index.php?controller=order&step=1"
+    When I fill in "email_create" with "vioice7@yahooo.com"
+    And I press "Create an account"
+    And I wait 10 seconds
+    Then I should see "Your personal information"
+
