@@ -9,7 +9,7 @@ use Behat\MinkExtension\Context\MinkContext;
 /**
  * Defines application features from the specific context.
  */
-class FeatureContext implements Context
+class FeatureContext extends MinkContext implements Context
 {
     
     /**
@@ -22,5 +22,19 @@ class FeatureContext implements Context
     public function __construct()
     {
     }
+
+    /**
+     * Waits a while, for debugging.
+     *
+     * @param int $seconds
+     *   How long to wait.
+     *
+     * @When I wait :seconds second(s)
+     */
+    public function wait($seconds) {
+      sleep($seconds);
+   }
+
+
 
 }
