@@ -3,3 +3,10 @@ default:
         Behat\MinkExtension:
             base_url: /
             goutte: ~
+    
+    suites:
+        default:
+            contexts:
+                 - FeatureContext
+                 - Behat\MinkExtension\Context\MinkContext
+            

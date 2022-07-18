@@ -6,15 +6,12 @@ use Behat\Gherkin\Node\PyStringNode;
 use Behat\Gherkin\Node\TableNode;
 use Behat\MinkExtension\Context\MinkContext;
 
-//require_once __DIR__.'/../../vendor/phpunit/phpunit/src/Framework/Assert/Functions.php';
-
 /**
  * Defines application features from the specific context.
  */
-class FeatureContext extends MinkContext implements Context
+class FeatureContext implements Context
 {
-    private $output;
-
+    
     /**
      * Initializes context.
      *
@@ -25,17 +22,5 @@ class FeatureContext extends MinkContext implements Context
     public function __construct()
     {
     }
-
-    /**
-     * @Then I should see :string in the output
-     */
-    public function iShouldSeeInTheOutput($string)
-    {
-        assertContains(
-            $string,
-            $this->output,
-            sprintf('Did not see "%s" in output "%s"', $string, $this->output)
-        );
-    }
-
+    
 }
