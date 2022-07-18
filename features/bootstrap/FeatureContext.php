@@ -35,6 +35,19 @@ class FeatureContext extends MinkContext implements Context
       sleep($seconds);
    }
 
+   /**
+    * @When I scroll :number pixels
+    */
+    public function scrollIntoView($number)
+    {
+      $function = <<<JS
+      (function(){
+        window.scrollBy(0, "$number");
+      })()
+JS;
+      $this->getSession()->executeScript($function);
+    }
+
 
 
 }
