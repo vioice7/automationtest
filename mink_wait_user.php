@@ -17,8 +17,10 @@ $driver = new Selenium2Driver();
 $session = new Session($driver);
 
 
-// delay in seconds
-$delay = 3;
+// delay in miliseconds
+$delay = 30000;
+
+// start session
 
 $session->start();
 
@@ -30,29 +32,49 @@ echo "Current URL: ". $session->getCurrentUrl() . "\n";
 // Get the current page
 $page = $session->getPage();
 
-
 clickVisibleElement($page, 'css', '#add_to_cart');
 
 clickVisibleElement($page, 'css', '.button-medium');
 
-sleep($delay);
+echo 'step 0';
+
+$session->wait($delay);
+
 scrollBy($session, 300);
 
 clickVisibleElement($page, 'css', '.standard-checkout');
 
-fillTextField($page, 'css', '#email_create', 'test01@test01.aim');
+echo 'step 1';
 
-clickVisibleElement($page, 'css', '#SubmitCreate');
+$session->wait($delay);
+
+scrollBy($session, 400);
+
+fillTextField($page, 'css', '#email', 'test@test.aime');
+
+fillTextField($page, 'css', '#passwd', 'test()10');
+
+clickVisibleElement($page, 'css', '#SubmitLogin');
+
+echo 'step 2';
+
+$session->wait($delay);
+
+scrollBy($session, 600);
+
+$session->wait(3000);
+
+clickVisibleElement($page, 'css', '.cart_navigation > .button-medium');
+
+$session->wait(3000);
+
+clickVisibleElement($page, 'css', '#uniform-cgv');
+
+
+
+// sleep 10 seconds then stop session
 
 sleep(10);
-scrollBy($session, 900);
-
-selectOptionValue($page, 'css', '#id_state', 'New York');
-
-// selectRadio();
-// selectCheckbox();
-
-sleep($delay);
 
 $session->stop();
 
@@ -67,16 +89,22 @@ function clickVisibleElement($page, $elementType, $elementSelector) {
     $el = $page->find($elementType, $elementSelector);
     while(true) {
 
-        if($el->isVisible() === false)
-        {
-            echo "\nThe button with identifier " . $elementSelector . " isn't visible at the moment ... keep looking! :D";
+        if($el === null) {
+            //echo "\nThe field with identifier " . $elementSelector . " isn't found at moment ... keep looking! :D";
             $el = $page->find($elementType, $elementSelector);
-        }
-        else {
-            break;
+        } else {
+            if($el->isVisible() === false)
+            {
+                //echo "\nThe button with identifier " . $elementSelector . " isn't visible at the moment ... keep looking! :D";
+                $el = $page->find($elementType, $elementSelector);
+            }
+            else {
+                break;
+            }
         }
     }
     $el->click();
+
 }
 
 function fillTextField($page, $elementType, $elementSelector, $value) {
@@ -85,12 +113,13 @@ function fillTextField($page, $elementType, $elementSelector, $value) {
     while(true) {
 
         if($el === null) {
+            //echo "\nThe field with identifier " . $elementSelector . " isn't found at moment ... keep looking! :D";
             $el = $page->find($elementType, $elementSelector);
         } else {
 
             if($el->isVisible() === false)
             {
-                echo "\nThe field with identifier " . $elementSelector . " isn't visible at the moment ... keep looking! :D";
+                //echo "\nThe field with identifier " . $elementSelector . " isn't visible at the moment ... keep looking! :D";
                 $el = $page->find($elementType, $elementSelector);
             }
             else {
@@ -117,6 +146,32 @@ function selectOptionValue($page, $elementType, $elementSelector, $value) {
             if($el->isVisible() === false)
             {
                 echo "\nThe field with identifier " . $elementSelector . " isn't visible at the moment ... keep looking! :D";
+                $el = $page->find($elementType, $elementSelector);
+            }
+            else {
+                break;
+            }            
+        }
+
+    }
+    $el->setValue($value);
+
+}
+
+function selectCheckbox($page, $elementType, $elementSelector, $value) {
+
+    // Delay until visible
+    $el = $page->find($elementType, $elementSelector);
+    while(true) {
+
+        if($el === null) {
+            echo "\nThe checkbox with identifier " . $elementSelector . " isn't found at moment ... keep looking! :D";
+            $el = $page->find($elementType, $elementSelector);
+        } else {
+
+            if($el->isVisible() === false)
+            {
+                echo "\nThe checkbox with identifier " . $elementSelector . " isn't visible at the moment ... keep looking! :D";
                 $el = $page->find($elementType, $elementSelector);
             }
             else {
