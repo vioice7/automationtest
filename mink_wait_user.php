@@ -18,7 +18,7 @@ $session = new Session($driver);
 
 
 // delay in miliseconds
-$delay = 30000;
+$delay = 21000;
 
 // start session
 
@@ -36,7 +36,7 @@ clickVisibleElement($page, 'css', '#add_to_cart');
 
 clickVisibleElement($page, 'css', '.button-medium');
 
-echo 'step 0';
+echo "\nStep 0 (Add to cart a product) done!\n";
 
 $session->wait($delay);
 
@@ -44,7 +44,7 @@ scrollBy($session, 300);
 
 clickVisibleElement($page, 'css', '.standard-checkout');
 
-echo 'step 1';
+echo "\nStep 1 (Summary) done!\n";
 
 $session->wait($delay);
 
@@ -56,7 +56,7 @@ fillTextField($page, 'css', '#passwd', 'test()10');
 
 clickVisibleElement($page, 'css', '#SubmitLogin');
 
-echo 'step 2';
+echo "\nStep 2 (Log User) done!\n";
 
 $session->wait($delay);
 
@@ -65,6 +65,8 @@ scrollBy($session, 600);
 $session->wait(3000);
 
 clickVisibleElement($page, 'css', '.cart_navigation > .button-medium');
+
+echo "\nStep 3 (Adress) done!\n";
 
 $session->wait(3000);
 
@@ -75,6 +77,18 @@ scrollBy($session, 300);
 $session->wait(3000);
 
 clickVisibleElement($page, 'css', '.standard-checkout');
+
+echo "\nStep 4 (Shipping) done!\n";
+
+$session->wait(3000);
+
+scrollBy($session, 500);
+
+$session->wait(3000);
+
+if(checkElement($page, 'css', '.bankwire')) {
+    echo "\nStep 5 (Payment) is available!\n";
+}
 
 // sleep 10 seconds then stop session
 
@@ -162,20 +176,29 @@ function selectOptionValue($page, $elementType, $elementSelector, $value) {
 
 }
 
+function checkElement($page, $elementType, $elementSelector) {
+        // Delay until visible
+        $el = $page->find($elementType, $elementSelector);
+        while(true) {
+    
+            if($el === null) {
+                echo "\nThe field with identifier " . $elementSelector . " isn't found at moment ... keep looking! :D";
+                $el = $page->find($elementType, $elementSelector);
+            } else {
+                if($el->isVisible() === false)
+                {
+                    echo "\nThe button with identifier " . $elementSelector . " isn't visible at the moment ... keep looking! :D";
+                    $el = $page->find($elementType, $elementSelector);
+                }
+                else {
+                    break;
+                }
+            }
+        }
+        return true;
+}
+
 function scrollBy($session, $numberPixels) {
     // --- Scroll by a number of pixels ---
     $session->executeScript("window.scrollBy(0, ".$numberPixels.");");
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
